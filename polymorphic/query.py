@@ -1,6 +1,7 @@
 """
 QuerySet for PolymorphicModel
 """
+
 import copy
 from collections import defaultdict
 
@@ -190,9 +191,9 @@ class PolymorphicQuerySet(QuerySet):
     def order_by(self, *field_names):
         """translate the field paths in the args, then call vanilla order_by."""
         field_names = [
-            translate_polymorphic_field_path(self.model, a)
-            if isinstance(a, str)
-            else a  # allow expressions to pass unchanged
+            (
+                translate_polymorphic_field_path(self.model, a) if isinstance(a, str) else a
+            )  # allow expressions to pass unchanged
             for a in field_names
         ]
         return super().order_by(*field_names)
